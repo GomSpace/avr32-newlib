@@ -84,7 +84,7 @@ ELIX_SOURCES = \
 	strcasestr.c \
 	strndup_r.c \
 	wcpcpy.c \
-	wcpncpy.c \
+	wcpncpy.c 
 endif
 
 libstring_la_LDFLAGS = -Xcompiler -nostdlib
