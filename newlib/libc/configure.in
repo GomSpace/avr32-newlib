@@ -17,6 +17,17 @@ AC_ARG_ENABLE(newlib-io-pos-args,
   *)   AC_MSG_ERROR(bad value ${enableval} for newlib-io-pos-args option) ;;
  esac], [newlib_io_pos_args=no])dnl
 
+dnl Support --enable-retargetable-locking used by libc/sys
+AC_ARG_ENABLE(newlib-retargetable-locking,
+[  --enable-newlib-retargetable-locking    Allow locking routines to be retargeted at link time],
+[case "${enableval}" in
+   yes) newlib_retargetable_locking=yes ;;
+   no)  newlib_retargetable_locking=no ;;
+   *) AC_MSG_ERROR(bad value ${enableval} for newlib-retargetable-locking) ;;
+ esac],[newlib_retargetable_locking=no])dnl
+AM_CONDITIONAL(NEWLIB_RETARGETABLE_LOCKING, test x$newlib_retargetable_locking = xyes)
+
+
 NEWLIB_CONFIGURE(..)
 
 dnl We have to enable libtool after NEWLIB_CONFIGURE because if we try and
