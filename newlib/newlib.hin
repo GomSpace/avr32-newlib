@@ -26,6 +26,9 @@
    very restricted storage.  */
 #undef _WANT_REENT_SMALL
 
+/* Optional suport for retargetable locking routines */
+#undef _RETARGETABLE_LOCKING
+
 /* Multibyte supported */
 #undef _MB_CAPABLE
 

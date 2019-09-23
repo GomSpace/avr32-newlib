@@ -865,6 +865,8 @@ build
 newlib_basedir
 MAY_SUPPLY_SYSCALLS_FALSE
 MAY_SUPPLY_SYSCALLS_TRUE
+NEWLIB_RETARGETABLE_LOCKING_FALSE
+NEWLIB_RETARGETABLE_LOCKING_TRUE
 target_alias
 host_alias
 build_alias
@@ -907,6 +909,7 @@ ac_subst_files=''
 ac_user_opts='
 enable_option_checking
 enable_newlib_io_pos_args
+enable_newlib_retargetable_locking
 enable_multilib
 enable_target_optspace
 enable_malloc_debugging
@@ -1555,6 +1558,7 @@ Optional Features:
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --enable-newlib-io-pos-args enable printf-family positional arg support
+  --enable-newlib-retargetable-locking    Allow locking routines to be retargeted at link time
   --enable-multilib         build many library versions (default)
   --enable-target-optspace  optimize for space
   --enable-malloc-debugging indicate malloc debugging requested
@@ -2319,6 +2323,26 @@ if test "${enable_newlib_io_pos_args+set}" = set; then :
 else
   newlib_io_pos_args=no
 fi
+
+# Check whether --enable-newlib-retargetable-locking was given.
+if test "${enable_newlib_retargetable_locking+set}" = set; then :
+  enableval=$enable_newlib_retargetable_locking; case "${enableval}" in
+   yes) newlib_retargetable_locking=yes ;;
+   no)  newlib_retargetable_locking=no ;;
+   *) as_fn_error "bad value ${enableval} for newlib-retargetable-locking" "$LINENO" 5 ;;
+ esac
+else
+  newlib_retargetable_locking=no
+fi
+ if test x$newlib_retargetable_locking = xyes; then
+  NEWLIB_RETARGETABLE_LOCKING_TRUE=
+  NEWLIB_RETARGETABLE_LOCKING_FALSE='#'
+else
+  NEWLIB_RETARGETABLE_LOCKING_TRUE='#'
+  NEWLIB_RETARGETABLE_LOCKING_FALSE=
+fi
+
+
 
 
 # Make sure we can run config.sub.
@@ -5811,13 +5835,13 @@ if test "${lt_cv_nm_interface+set}" = set; then :
 else
   lt_cv_nm_interface="BSD nm"
   echo "int some_variable = 0;" > conftest.$ac_ext
-  (eval echo "\"\$as_me:5814: $ac_compile\"" >&5)
+  (eval echo "\"\$as_me:5838: $ac_compile\"" >&5)
   (eval "$ac_compile" 2>conftest.err)
   cat conftest.err >&5
-  (eval echo "\"\$as_me:5817: $NM \\\"conftest.$ac_objext\\\"\"" >&5)
+  (eval echo "\"\$as_me:5841: $NM \\\"conftest.$ac_objext\\\"\"" >&5)
   (eval "$NM \"conftest.$ac_objext\"" 2>conftest.err > conftest.out)
   cat conftest.err >&5
-  (eval echo "\"\$as_me:5820: output\"" >&5)
+  (eval echo "\"\$as_me:5844: output\"" >&5)
   cat conftest.out >&5
   if $GREP 'External.*some_variable' conftest.out > /dev/null; then
     lt_cv_nm_interface="MS dumpbin"
@@ -6908,7 +6932,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 6911 "configure"' > conftest.$ac_ext
+  echo '#line 6935 "configure"' > conftest.$ac_ext
   if { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_compile\""; } >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -7742,11 +7766,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7745: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7769: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:7749: \$? = $ac_status" >&5
+   echo "$as_me:7773: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -8064,11 +8088,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8067: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8091: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:8071: \$? = $ac_status" >&5
+   echo "$as_me:8095: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -8169,11 +8193,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8172: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8196: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:8176: \$? = $ac_status" >&5
+   echo "$as_me:8200: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -8224,11 +8248,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8227: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8251: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:8231: \$? = $ac_status" >&5
+   echo "$as_me:8255: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -10594,7 +10618,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<_LT_EOF
-#line 10597 "configure"
+#line 10621 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -10694,7 +10718,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<_LT_EOF
-#line 10697 "configure"
+#line 10721 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -11230,6 +11254,10 @@ LIBOBJS=$ac_libobjs
 LTLIBOBJS=$ac_ltlibobjs
 
 
+if test -z "${NEWLIB_RETARGETABLE_LOCKING_TRUE}" && test -z "${NEWLIB_RETARGETABLE_LOCKING_FALSE}"; then
+  as_fn_error "conditional \"NEWLIB_RETARGETABLE_LOCKING\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
 if test -z "${MAY_SUPPLY_SYSCALLS_TRUE}" && test -z "${MAY_SUPPLY_SYSCALLS_FALSE}"; then
   as_fn_error "conditional \"MAY_SUPPLY_SYSCALLS\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
