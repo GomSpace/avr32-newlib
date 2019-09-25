@@ -25,9 +25,9 @@ _DEFUN (__register_exitproc,
   register struct _atexit *p;
 
 #ifndef __SINGLE_THREAD__
-  __LOCK_INIT(static, lock);
+  __LOCK_INIT(static, __atexit_recursive_mutex);
 
-  __lock_acquire(lock);
+  __lock_acquire(__atexit_recursive_mutex);
 #endif
 
   p = _GLOBAL_REENT->_atexit;
@@ -42,7 +42,7 @@ _DEFUN (__register_exitproc,
       if (p == NULL)
 	{
 #ifndef __SINGLE_THREAD__
-	  __lock_release(lock);
+	  __lock_release(__atexit_recursive_mutex);
 #endif
 	  return -1;
 	}
@@ -66,7 +66,7 @@ _DEFUN (__register_exitproc,
 	  if (args == NULL)
 	    {
 #ifndef __SINGLE_THREAD__
-	      __lock_release(lock);
+	      __lock_release(__atexit_recursive_mutex);
 #endif
 	      return -1;
 	    }
@@ -85,7 +85,7 @@ _DEFUN (__register_exitproc,
     }
   p->_fns[p->_ind++] = fn;
 #ifndef __SINGLE_THREAD__
-  __lock_release(lock);
+  __lock_release(__atexit_recursive_mutex);
 #endif
   return 0;
 }
